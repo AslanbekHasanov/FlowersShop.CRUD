@@ -90,7 +90,7 @@ namespace FlowersShop.CRUD.Brokers.Storage
             {
                 if (Flowers[itaration] is not null)
                 {
-                    if (Flowers[itaration].Id == Id )
+                    if (Flowers[itaration].Id == flower.Id )
                     {
                         Flowers[itaration] = new Flower()
                         {
