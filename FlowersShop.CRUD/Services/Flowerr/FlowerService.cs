@@ -19,8 +19,34 @@ namespace FlowersShop.CRUD.Services.Flowerr
         public Flower CreateFlower(Flower flower) => 
             this.storageBroker.AddFlower(flower);
 
-        public Flower GetFlower(int id) =>
-            this.storageBroker.ReadFlower(id);
+        public Flower GetFlower(int id)
+        {
+            return id is 0
+                ? InvalidGetFlowerById()
+                : ValidationAndGetFlower(id);
+
+        }
+
+        private Flower ValidationAndGetFlower(int id)
+        {
+            Flower isFlower = this.storageBroker.ReadFlower(id);
+            if (isFlower is not null) 
+            {
+                this.loggingBroker.LogInformation("Success.");
+                return isFlower;
+            }
+            else
+            {
+                this.loggingBroker.LogError("No data found for this id.");
+                return new Flower();
+            }
+        }
+
+        private Flower InvalidGetFlowerById()
+        {
+            this.loggingBroker.LogError("Invlid id.");
+            return new Flower();
+        }
 
         public Flower ModifyFlower(Flower flower)=>
             this.storageBroker.Update(flower);
