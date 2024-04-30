@@ -44,6 +44,8 @@ namespace FlowerShop.CRUD
                         break;
                     case "4":
                         Flower flower = new Flower();
+			            Console.Write("Enter your flower id: ");
+                        int flowerUpdateByid = Convert.ToInt32(Console.ReadLine());
                         Console.Write("Enter flower name : ");
                         flower.Name = Console.ReadLine();
                         Console.Write("Enter flower color : ");
@@ -53,7 +55,7 @@ namespace FlowerShop.CRUD
                         Console.Write("Enter flower discreption : ");
                         flower.Discreption = Console.ReadLine();
 
-                        flowerService.ModifyFlower(flower);
+                        flowerService.ModifyFlower(flowerUpdateByid , flower);
                         break;
                     case "5":
                         Flower flowerCreate = new Flower();
