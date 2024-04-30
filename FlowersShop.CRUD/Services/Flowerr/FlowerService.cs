@@ -51,8 +51,32 @@ namespace FlowersShop.CRUD.Services.Flowerr
         public Flower ModifyFlower(Flower flower)=>
             this.storageBroker.Update(flower);
 
-        public Flower[] ReadAllFlowers()=>
-            this.storageBroker.GetAllFlowers();
+        public Flower[] ReadAllFlowers()
+        {
+            var flowers = this.storageBroker.GetAllFlowers();
+
+            if (flowers.Length is 0)
+            {
+                this.loggingBroker.LogError("Not exist Information!");
+                return flowers;
+            }
+            else
+            {
+                foreach (var flowerItem in flowers)
+                {
+                    if (flowerItem is not null)
+                    {
+                        this.loggingBroker.LogInformation(
+                                $"Id: {flowerItem.Id}\n" +
+                                $"Name: {flowerItem.Name}\n" +
+                                $"Discreption: {flowerItem.Discreption}\n" +
+                                $"Color: {flowerItem.Color}\n" +
+                                $"Cost: {flowerItem.Cost}");
+                    }
+                }
+            }
+            return flowers;
+        }
 
         public bool RemoveFlower(int id)
         {
