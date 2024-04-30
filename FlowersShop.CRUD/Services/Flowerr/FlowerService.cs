@@ -16,9 +16,12 @@ namespace FlowersShop.CRUD.Services.Flowerr
             this.loggingBroker = new LoggingBroker();
         }
 
-        public Flower CreateFlower(Flower flower) => 
-            this.storageBroker.AddFlower(flower);
-
+        public Flower CreateFlower(Flower flower)
+        {
+            return flower is null
+                ? InvalidCreateFlower()
+                : ValidationAndCreateFlower(flower);
+        }
         public Flower GetFlower(int id)
         {
             return id is 0
@@ -27,29 +30,12 @@ namespace FlowersShop.CRUD.Services.Flowerr
 
         }
 
-        private Flower ValidationAndGetFlower(int id)
+        public Flower ModifyFlower(int id, Flower flower)
         {
-            Flower isFlower = this.storageBroker.ReadFlower(id);
-            if (isFlower is not null) 
-            {
-                this.loggingBroker.LogInformation("Success.");
-                return isFlower;
-            }
-            else
-            {
-                this.loggingBroker.LogError("No data found for this id.");
-                return new Flower();
-            }
+            return flower is null
+                ? InvalidModifyFlower()
+                : ValidationAndModifyFlower(id, flower);
         }
-
-        private Flower InvalidGetFlowerById()
-        {
-            this.loggingBroker.LogError("Invlid id.");
-            return new Flower();
-        }
-
-        public Flower ModifyFlower(Flower flower)=>
-            this.storageBroker.Update(flower);
 
         public Flower[] ReadAllFlowers()
         {
@@ -85,6 +71,71 @@ namespace FlowersShop.CRUD.Services.Flowerr
                     : ValidationAndRemoveFlower(id);
         }
 
+        private Flower ValidationAndCreateFlower(Flower flower)
+        {
+            if (flower.Id is 0
+                || String.IsNullOrWhiteSpace(flower.Name)
+                || String.IsNullOrWhiteSpace(flower.Color)
+                || flower.Cost is 0)
+            {
+                this.loggingBroker.LogError("The information you want to send is incomplete.");
+                return new Flower();
+            }
+            else
+            {
+                var flowerInfo = this.storageBroker.AddFlower(flower);
+                if (flowerInfo is null)
+                {
+                    this.loggingBroker.LogError("Not Added flower.");
+                    return new Flower();
+                }
+                else
+                {
+                    this.loggingBroker.LogInformation("Flower is added.");
+                    return flowerInfo;
+                }
+            }
+        }
+
+        private Flower InvalidCreateFlower()
+        {
+            this.loggingBroker.LogError("The information is not fully loaded.");
+            return new Flower();
+        }
+
+        private Flower ValidationAndModifyFlower(int id, Flower flower)
+        {
+            if (id is 0
+                || flower.Id is 0
+                || String.IsNullOrWhiteSpace(flower.Name)
+                || String.IsNullOrWhiteSpace(flower.Color)
+                || flower.Cost is 0)
+            {
+                this.loggingBroker.LogError("The data is invalid.");
+                return new Flower();
+            }
+            else
+            {
+                var flowers = this.storageBroker.Update(id, flower);
+                if (flowers is null)
+                {
+                    this.loggingBroker.LogError("Not Update!");
+                    return new Flower();
+                }
+                else
+                {
+                    this.loggingBroker.LogInformation("Flower is updated!");
+                    return flowers;
+                }
+            }
+        }
+
+        private Flower InvalidModifyFlower()
+        {
+            this.loggingBroker.LogError("The information is not fully loaded.");
+            return new Flower();
+        }
+
         private bool ValidationAndRemoveFlower(int id)
         {
             bool isDelete = this.storageBroker.Delete(id);
@@ -105,6 +156,27 @@ namespace FlowersShop.CRUD.Services.Flowerr
         {
             this.loggingBroker.LogError("Invlid id.");
             return false;
+        }
+
+        private Flower ValidationAndGetFlower(int id)
+        {
+            Flower isFlower = this.storageBroker.ReadFlower(id);
+            if (isFlower is not null)
+            {
+                this.loggingBroker.LogInformation("Success.");
+                return isFlower;
+            }
+            else
+            {
+                this.loggingBroker.LogError("No data found for this id.");
+                return new Flower();
+            }
+        }
+
+        private Flower InvalidGetFlowerById()
+        {
+            this.loggingBroker.LogError("Invlid id.");
+            return new Flower();
         }
     }
 }

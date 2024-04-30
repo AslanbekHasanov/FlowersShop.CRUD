@@ -7,7 +7,7 @@ namespace FlowersShop.CRUD.Services.Flowerr
         Flower[] ReadAllFlowers();
         Flower GetFlower(int id);
         Flower CreateFlower(Flower flower);
-        Flower ModifyFlower(Flower flower);
+        Flower ModifyFlower(int id, Flower flower);
         bool RemoveFlower(int id);
     }
 }

@@ -84,13 +84,13 @@ namespace FlowersShop.CRUD.Brokers.Storage
             return new Flower();
         }
 
-        public Flower Update(Flower flower)
+        public Flower Update(int id, Flower flower)
         {
             for (int itaration = 0; itaration < Flowers.Length; itaration++)
             {
                 if (Flowers[itaration] is not null)
                 {
-                    if (Flowers[itaration].Id == flower.Id )
+                    if (Flowers[itaration].Id ==  id )
                     {
                         Flowers[itaration] = new Flower()
                         {
