@@ -52,12 +52,15 @@ namespace FlowersShop.CRUD.Services.Flowerr
                 {
                     if (flowerItem is not null)
                     {
-                        this.loggingBroker.LogInformation(
-                                $"Id: {flowerItem.Id}\n" +
-                                $"Name: {flowerItem.Name}\n" +
-                                $"Discreption: {flowerItem.Discreption}\n" +
-                                $"Color: {flowerItem.Color}\n" +
-                                $"Cost: {flowerItem.Cost}");
+                        if (flowerItem.Id is not 0)
+                        {
+                            this.loggingBroker.LogInformation(
+                              $"Id: {flowerItem.Id}\n" +
+                              $"Name: {flowerItem.Name}\n" +
+                              $"Discreption: {flowerItem.Discreption}\n" +
+                              $"Color: {flowerItem.Color}\n" +
+                              $"Cost: {flowerItem.Cost}");
+                        }
                     }
                 }
             }
@@ -160,16 +163,22 @@ namespace FlowersShop.CRUD.Services.Flowerr
 
         private Flower ValidationAndGetFlower(int id)
         {
-            Flower isFlower = this.storageBroker.ReadFlower(id);
-            if (isFlower is not null)
-            {
-                this.loggingBroker.LogInformation("Success.");
-                return isFlower;
-            }
-            else
+            Flower flowers = this.storageBroker.ReadFlower(id);
+            if (flowers.Id is 0)
             {
                 this.loggingBroker.LogError("No data found for this id.");
                 return new Flower();
+            }
+            else
+            {
+                this.loggingBroker.LogInformation($"Id: {flowers.Id}\n" +
+                    $"Name: {flowers.Name}\n" +
+                    $"Color: {flowers.Color}\n" +
+                    $"Cost: {flowers.Cost}\n" +
+                    $"Discreption: {flowers.Discreption}");
+                this.loggingBroker.LogInformation("Success.");
+                return flowers;
+                
             }
         }
 

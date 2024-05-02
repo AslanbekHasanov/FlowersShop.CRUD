@@ -1,5 +1,4 @@
 ﻿
-
 using FlowersShop.CRUD.Models;
 using FlowersShop.CRUD.Services.Flowerr;
 
@@ -21,16 +20,7 @@ namespace FlowerShop.CRUD
                 switch (command)
                 {
                     case "1":
-                        Flower[] flowers = flowerService.ReadAllFlowers();
-                        foreach (var flowerItem in flowers)
-                        {
-                            Console.WriteLine($"Id: {flowerItem.Id}");
-                            Console.WriteLine($"Name: {flowerItem.Name}");
-                            Console.WriteLine($"Color: {flowerItem.Color}");
-                            Console.WriteLine($"Cost: {flowerItem.Cost}");
-                            Console.WriteLine($"Discreption: {flowerItem.Discreption}");
-                            Console.WriteLine("=======================");
-                        }
+                        flowerService.ReadAllFlowers();
                         break;
                     case "2":
                         Console.Write("Enter your flower id: ");
@@ -44,6 +34,8 @@ namespace FlowerShop.CRUD
                         break;
                     case "4":
                         Flower flower = new Flower();
+                        Console.Write("Exsist information, enter id: ");
+                        flower.Id = Convert.ToInt32(Console.ReadLine());
                         Console.Write("Enter flower name : ");
                         flower.Name = Console.ReadLine();
                         Console.Write("Enter flower color : ");
@@ -53,10 +45,12 @@ namespace FlowerShop.CRUD
                         Console.Write("Enter flower discreption : ");
                         flower.Discreption = Console.ReadLine();
 
-                        flowerService.ModifyFlower(flower);
+                        flowerService.ModifyFlower(flower.Id,flower);
                         break;
                     case "5":
                         Flower flowerCreate = new Flower();
+                        Console.Write("Enter flower id : ");
+                        flowerCreate.Id = Convert.ToInt32(Console.ReadLine());
                         Console.Write("Enter flower name : ");
                         flowerCreate.Name = Console.ReadLine();
                         Console.Write("Enter flower color : ");
@@ -88,7 +82,6 @@ namespace FlowerShop.CRUD
             Console.WriteLine("3. Remove one flower.");
             Console.WriteLine("4. Modify one flower.");
             Console.WriteLine("5. Create one flower.");
-            Console.WriteLine("0. Exit");
         }
     }
 }

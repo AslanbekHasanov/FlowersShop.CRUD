@@ -94,6 +94,7 @@ namespace FlowersShop.CRUD.Brokers.Storage
                     {
                         Flowers[itaration] = new Flower()
                         {
+                            Id = id,
                             Name = flower.Name,
                             Color = flower.Color,
                             Cost = flower.Cost,
